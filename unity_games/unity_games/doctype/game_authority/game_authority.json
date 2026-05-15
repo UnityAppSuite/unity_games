@@ -1,0 +1,338 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:title",
+ "creation": "2026-05-15 12:00:00.000000",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "is_submittable": 1,
+ "track_changes": 1,
+ "field_order": [
+  "details_tab",
+  "organiser",
+  "title",
+  "column_break_window",
+  "start_date",
+  "end_date",
+  "section_break_scope",
+  "branch",
+  "location",
+  "column_break_scope",
+  "status",
+  "enabled",
+  "section_break_flags",
+  "holiday",
+  "send_reminder",
+  "column_break_flags",
+  "all_day",
+  "section_break_games",
+  "games",
+  "section_break_desc",
+  "description",
+  "gallery_tab",
+  "upload_images_btn",
+  "gallery_status",
+  "section_break_gallery",
+  "background_image",
+  "images",
+  "google_calendar_tab",
+  "sync_with_google_calendar",
+  "add_video_conferencing",
+  "column_break_gcal",
+  "google_calendar",
+  "google_calendar_id",
+  "section_break_gcal_ro",
+  "google_calendar_event_id",
+  "google_meet_link",
+  "pulled_from_google_calendar",
+  "rules_tab",
+  "all_classes",
+  "classes"
+ ],
+ "fields": [
+  {
+   "fieldname": "details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "organiser",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Organiser",
+   "options": "Game Organiser",
+   "reqd": 1
+  },
+  {
+   "description": "e.g. CBSE Cluster Aug 2026",
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Title",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "column_break_window",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Window opens",
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "description": "Window closes",
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "End Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_scope",
+   "fieldtype": "Section Break",
+   "label": "Scope"
+  },
+  {
+   "description": "Branch this season runs for",
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "description": "Venue",
+   "fieldname": "location",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Address"
+  },
+  {
+   "fieldname": "column_break_scope",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Draft\nPublished\nClosed\nCancelled",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "description": "Parent-visible toggle",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "section_break_flags",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "description": "Skipped by morning reminder",
+   "fieldname": "holiday",
+   "fieldtype": "Check",
+   "label": "Holiday"
+  },
+  {
+   "default": "1",
+   "description": "Trigger the daily morning reminder",
+   "fieldname": "send_reminder",
+   "fieldtype": "Check",
+   "label": "Send an email reminder in the morning"
+  },
+  {
+   "fieldname": "column_break_flags",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "description": "All-day for Google Calendar",
+   "fieldname": "all_day",
+   "fieldtype": "Check",
+   "label": "All Day"
+  },
+  {
+   "fieldname": "section_break_games",
+   "fieldtype": "Section Break",
+   "label": "Games in this Season"
+  },
+  {
+   "description": "Games running this season",
+   "fieldname": "games",
+   "fieldtype": "Table",
+   "label": "Games",
+   "options": "Game Authority Games",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_desc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
+  },
+  {
+   "fieldname": "gallery_tab",
+   "fieldtype": "Tab Break",
+   "label": "Gallery"
+  },
+  {
+   "depends_on": "eval:!doc.__islocal",
+   "description": "Upload gallery images",
+   "fieldname": "upload_images_btn",
+   "fieldtype": "Button",
+   "label": "📷 Upload Images"
+  },
+  {
+   "fieldname": "gallery_status",
+   "fieldtype": "HTML",
+   "label": "Gallery Status"
+  },
+  {
+   "fieldname": "section_break_gallery",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "background_image",
+   "fieldtype": "Attach Image",
+   "label": "Background Image"
+  },
+  {
+   "description": "Added via Upload Images",
+   "fieldname": "images",
+   "fieldtype": "Table",
+   "label": "Gallery Images",
+   "options": "Game Authority Image"
+  },
+  {
+   "fieldname": "google_calendar_tab",
+   "fieldtype": "Tab Break",
+   "label": "Google Calendar"
+  },
+  {
+   "default": "0",
+   "fieldname": "sync_with_google_calendar",
+   "fieldtype": "Check",
+   "label": "Sync with Google Calendar"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:doc.sync_with_google_calendar",
+   "description": "via Google Meet",
+   "fieldname": "add_video_conferencing",
+   "fieldtype": "Check",
+   "label": "Add Video Conferencing"
+  },
+  {
+   "fieldname": "column_break_gcal",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.sync_with_google_calendar",
+   "fieldname": "google_calendar",
+   "fieldtype": "Link",
+   "label": "Google Calendar",
+   "mandatory_depends_on": "eval:doc.sync_with_google_calendar",
+   "options": "Google Calendar"
+  },
+  {
+   "fetch_from": "google_calendar.google_calendar_id",
+   "fieldname": "google_calendar_id",
+   "fieldtype": "Data",
+   "label": "Google Calendar ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_gcal_ro",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "google_calendar_event_id",
+   "fieldtype": "Data",
+   "label": "Google Calendar Event ID",
+   "length": 320,
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "google_meet_link",
+   "fieldtype": "Small Text",
+   "label": "Google Meet Link",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "pulled_from_google_calendar",
+   "fieldtype": "Check",
+   "label": "Pulled from Google Calendar",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rules_tab",
+   "fieldtype": "Tab Break",
+   "label": "Rules & Limitations"
+  },
+  {
+   "default": "0",
+   "description": "Apply to all classes of the branch",
+   "fieldname": "all_classes",
+   "fieldtype": "Check",
+   "label": "All Classes"
+  },
+  {
+   "depends_on": "eval:doc.all_classes==0",
+   "description": "Eligible classes / divisions",
+   "fieldname": "classes",
+   "fieldtype": "Table",
+   "label": "Classes",
+   "options": "Game Authority Class"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-15 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Unity Games",
+ "name": "Game Authority",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}

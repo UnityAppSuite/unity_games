@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-05-15 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "class",
+  "school",
+  "all_divisions",
+  "divisions"
+ ],
+ "fields": [
+  {
+   "fieldname": "class",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Class",
+   "options": "Program",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "class.school",
+   "fieldname": "school",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "School",
+   "options": "School"
+  },
+  {
+   "default": "0",
+   "fieldname": "all_divisions",
+   "fieldtype": "Check",
+   "label": "All Divisions"
+  },
+  {
+   "depends_on": "eval:doc.all_divisions==0",
+   "description": "Comma-separated divisions",
+   "fieldname": "divisions",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Divisions"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-05-15 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Unity Games",
+ "name": "Game Authority Class",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

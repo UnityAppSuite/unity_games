@@ -1,0 +1,305 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-05-15 12:00:00.000000",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "is_submittable": 1,
+ "track_changes": 1,
+ "field_order": [
+  "student_section",
+  "student",
+  "student_registration_no",
+  "student_name",
+  "column_break_student",
+  "date_of_birth",
+  "student_age",
+  "pe_section",
+  "program_enrollment",
+  "academic_year",
+  "column_break_pe",
+  "student_class",
+  "student_division",
+  "branch",
+  "selection_section",
+  "game_authority",
+  "name_of_game",
+  "column_break_selection",
+  "age_group",
+  "events",
+  "cart_section",
+  "game_entry_details",
+  "payment_section",
+  "entry_fee",
+  "total_entry_fee",
+  "column_break_payment",
+  "payment_status",
+  "payment_completed_at",
+  "status_section",
+  "selection_status",
+  "external_portal_uid",
+  "column_break_status",
+  "external_sync_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "student_section",
+   "fieldtype": "Section Break",
+   "label": "Student Details"
+  },
+  {
+   "description": "Parent picks their own child",
+   "fieldname": "student",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Student",
+   "options": "Student",
+   "reqd": 1
+  },
+  {
+   "fieldname": "student_registration_no",
+   "fieldtype": "Data",
+   "label": "Student Reg. No.",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "student.student_name",
+   "fieldname": "student_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Student Name",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_student",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "student.date_of_birth",
+   "fieldname": "date_of_birth",
+   "fieldtype": "Date",
+   "label": "Date of Birth",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "description": "Calculated from DOB",
+   "fieldname": "student_age",
+   "fieldtype": "Data",
+   "label": "Student Age",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "pe_section",
+   "fieldtype": "Section Break",
+   "label": "Program Enrollment"
+  },
+  {
+   "description": "Resolved server-side",
+   "fieldname": "program_enrollment",
+   "fieldtype": "Link",
+   "label": "Program Enrollment",
+   "options": "Program Enrollment",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "academic_year",
+   "fieldtype": "Link",
+   "label": "Academic Year",
+   "options": "Academic Year",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_pe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "From Program Enrollment",
+   "fieldname": "student_class",
+   "fieldtype": "Data",
+   "label": "Student Class",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "description": "From Program Enrollment",
+   "fieldname": "student_division",
+   "fieldtype": "Data",
+   "label": "Student Division",
+   "read_only": 1
+  },
+  {
+   "description": "From the student's branch",
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "selection_section",
+   "fieldtype": "Section Break",
+   "label": "Game Selection"
+  },
+  {
+   "description": "Parent picks the season",
+   "fieldname": "game_authority",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Game Authority",
+   "options": "Game Authority",
+   "reqd": 1
+  },
+  {
+   "description": "Filtered by Game Authority",
+   "fieldname": "name_of_game",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Name of Game",
+   "options": "Games",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_selection",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Filtered by the game",
+   "fieldname": "age_group",
+   "fieldtype": "Link",
+   "label": "Age Group",
+   "options": "Age",
+   "reqd": 1
+  },
+  {
+   "description": "Filtered by the game",
+   "fieldname": "events",
+   "fieldtype": "Link",
+   "label": "Events",
+   "options": "Game Events",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cart_section",
+   "fieldtype": "Section Break",
+   "label": "Selected Games"
+  },
+  {
+   "description": "Multi-game cart; drives fan-out",
+   "fieldname": "game_entry_details",
+   "fieldtype": "Table",
+   "label": "Game Entry Details",
+   "options": "Game Entry Details"
+  },
+  {
+   "fieldname": "payment_section",
+   "fieldtype": "Section Break",
+   "label": "Payment"
+  },
+  {
+   "description": "Per-game fee",
+   "fieldname": "entry_fee",
+   "fieldtype": "Currency",
+   "label": "Entry Fee"
+  },
+  {
+   "description": "Payment amount field",
+   "fieldname": "total_entry_fee",
+   "fieldtype": "Currency",
+   "label": "Total Entry Fee"
+  },
+  {
+   "fieldname": "column_break_payment",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Not Applicable",
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Payment Status",
+   "options": "Not Applicable\nPending\nPaid\nFailed\nRefunded",
+   "reqd": 1
+  },
+  {
+   "description": "Set on payment success",
+   "fieldname": "payment_completed_at",
+   "fieldtype": "Datetime",
+   "label": "Payment Completed At",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status_section",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "default": "Applied",
+   "fieldname": "selection_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Selection Status",
+   "options": "Applied\nShortlisted\nSelected\nRejected\nWithdrawn",
+   "reqd": 1
+  },
+  {
+   "description": "CBSE UID after RPA sync",
+   "fieldname": "external_portal_uid",
+   "fieldtype": "Data",
+   "label": "External Portal UID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Not Synced",
+   "fieldname": "external_sync_status",
+   "fieldtype": "Select",
+   "label": "External Sync Status",
+   "options": "Not Synced\nSynced\nFailed",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-15 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Unity Games",
+ "name": "Game Entry",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "student_name",
+ "track_changes": 1
+}

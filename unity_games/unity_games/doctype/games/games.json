@@ -1,0 +1,104 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{game_organiser}-{name_of_game}",
+ "creation": "2026-05-15 12:00:00.000000",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "game_organiser",
+  "name_of_game",
+  "column_break_flags",
+  "enabled",
+  "section_break_age_groups",
+  "age_groups",
+  "section_break_events",
+  "events"
+ ],
+ "fields": [
+  {
+   "description": "Part of the name (e.g. CBSE)",
+   "fieldname": "game_organiser",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Game Organiser",
+   "options": "Game Organiser",
+   "reqd": 1
+  },
+  {
+   "description": "Part of the name; e.g. Basketball",
+   "fieldname": "name_of_game",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Name of Game",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_flags",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "description": "Hide from selection if off",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "section_break_age_groups",
+   "fieldtype": "Section Break",
+   "label": "Allowed Age Groups"
+  },
+  {
+   "description": "Allowed age bands",
+   "fieldname": "age_groups",
+   "fieldtype": "Table",
+   "label": "Age Groups",
+   "options": "Age Group",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_events",
+   "fieldtype": "Section Break",
+   "label": "Allowed Events"
+  },
+  {
+   "description": "Allowed events",
+   "fieldname": "events",
+   "fieldtype": "Table",
+   "label": "Events",
+   "options": "Events",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-15 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Unity Games",
+ "name": "Games",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

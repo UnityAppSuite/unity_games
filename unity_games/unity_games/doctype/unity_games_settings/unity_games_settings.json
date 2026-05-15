@@ -1,0 +1,195 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-05-15 12:00:00.000000",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "issingle": 1,
+ "track_changes": 1,
+ "field_order": [
+  "google_calendar_section",
+  "default_google_calendar",
+  "reminders_section",
+  "enable_morning_reminder",
+  "notify_coordinators",
+  "notify_guardians",
+  "column_break_reminders",
+  "reminder_days_before_close",
+  "coordinator_roles",
+  "reminder_sender",
+  "consent_section",
+  "consent_text",
+  "external_portal_section",
+  "rpa_enabled",
+  "cbse_portal_url",
+  "column_break_rpa",
+  "rpa_username",
+  "rpa_password",
+  "late_fee_section",
+  "late_fee_enabled",
+  "late_fee_amount",
+  "column_break_late_fee",
+  "late_fee_after_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "google_calendar_section",
+   "fieldtype": "Section Break",
+   "label": "Google Calendar"
+  },
+  {
+   "description": "Default calendar; per-season override",
+   "fieldname": "default_google_calendar",
+   "fieldtype": "Link",
+   "label": "Default Google Calendar",
+   "options": "Google Calendar"
+  },
+  {
+   "fieldname": "reminders_section",
+   "fieldtype": "Section Break",
+   "label": "Reminders"
+  },
+  {
+   "default": "1",
+   "description": "Master switch for the daily morning reminder",
+   "fieldname": "enable_morning_reminder",
+   "fieldtype": "Check",
+   "label": "Enable Morning Reminder"
+  },
+  {
+   "default": "1",
+   "fieldname": "notify_coordinators",
+   "fieldtype": "Check",
+   "label": "Notify Coordinators"
+  },
+  {
+   "default": "1",
+   "fieldname": "notify_guardians",
+   "fieldtype": "Check",
+   "label": "Notify Guardians"
+  },
+  {
+   "fieldname": "column_break_reminders",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "description": "Remind this many days before window close",
+   "fieldname": "reminder_days_before_close",
+   "fieldtype": "Int",
+   "label": "Reminder Days Before Close"
+  },
+  {
+   "default": "Sport Admin,Sport Coordinator",
+   "description": "Comma-separated roles for the digest",
+   "fieldname": "coordinator_roles",
+   "fieldtype": "Small Text",
+   "label": "Coordinator Roles"
+  },
+  {
+   "description": "Email Account used to send reminders",
+   "fieldname": "reminder_sender",
+   "fieldtype": "Link",
+   "label": "Reminder Sender",
+   "options": "Email Account"
+  },
+  {
+   "fieldname": "consent_section",
+   "fieldtype": "Section Break",
+   "label": "Consent"
+  },
+  {
+   "description": "Consent statement shown on the web form",
+   "fieldname": "consent_text",
+   "fieldtype": "Text Editor",
+   "label": "Consent Text"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "external_portal_section",
+   "fieldtype": "Section Break",
+   "label": "External Portal (RPA)"
+  },
+  {
+   "default": "0",
+   "fieldname": "rpa_enabled",
+   "fieldtype": "Check",
+   "label": "RPA Enabled"
+  },
+  {
+   "description": "e.g. https://cbseit.in",
+   "fieldname": "cbse_portal_url",
+   "fieldtype": "Data",
+   "label": "Portal URL"
+  },
+  {
+   "fieldname": "column_break_rpa",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "rpa_username",
+   "fieldtype": "Data",
+   "label": "RPA Username"
+  },
+  {
+   "description": "Encrypted at rest; rotate per academic year",
+   "fieldname": "rpa_password",
+   "fieldtype": "Password",
+   "label": "RPA Password"
+  },
+  {
+   "collapsible": 1,
+   "description": "CBSE late fee (deferred — PRD Q4)",
+   "fieldname": "late_fee_section",
+   "fieldtype": "Section Break",
+   "label": "Late Fee"
+  },
+  {
+   "default": "0",
+   "fieldname": "late_fee_enabled",
+   "fieldtype": "Check",
+   "label": "Late Fee Enabled"
+  },
+  {
+   "fieldname": "late_fee_amount",
+   "fieldtype": "Currency",
+   "label": "Late Fee Amount"
+  },
+  {
+   "fieldname": "column_break_late_fee",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Late fee applies after this date",
+   "fieldname": "late_fee_after_date",
+   "fieldtype": "Date",
+   "label": "Late Fee After Date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-05-15 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Unity Games",
+ "name": "Unity Games Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
