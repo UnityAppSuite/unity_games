@@ -1,14 +1,13 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:title",
- "creation": "2026-05-15 12:00:00.000000",
+ "creation": "2026-05-15 12:00:00",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "is_submittable": 1,
- "track_changes": 1,
  "field_order": [
   "details_tab",
   "organiser",
@@ -16,6 +15,8 @@
   "column_break_window",
   "start_date",
   "end_date",
+  "registration_fees_section",
+  "registration_fees_details",
   "section_break_scope",
   "branch",
   "location",
@@ -49,7 +50,8 @@
   "pulled_from_google_calendar",
   "rules_tab",
   "all_classes",
-  "classes"
+  "classes",
+  "amended_from"
  ],
  "fields": [
   {
@@ -82,15 +84,15 @@
   {
    "description": "Window opens",
    "fieldname": "start_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "Start Date",
    "reqd": 1
   },
   {
-   "description": "Window closes",
+   "description": "Window closes (after the late entry ends)",
    "fieldname": "end_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "in_list_view": 1,
    "label": "End Date",
    "reqd": 1
@@ -101,14 +103,16 @@
    "label": "Scope"
   },
   {
-   "description": "Branch this season runs for",
+   "allow_on_submit": 1,
+   "description": "Blank = all branches. If set, Classes are filtered to this branch.",
    "fieldname": "branch",
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "Branch",
-   "options": "Branch"
+   "options": "School"
   },
   {
+   "allow_on_submit": 1,
    "description": "Venue",
    "fieldname": "location",
    "fieldtype": "Link",
@@ -120,6 +124,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "default": "Draft",
    "fieldname": "status",
    "fieldtype": "Select",
@@ -130,6 +135,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "default": "0",
    "description": "Parent-visible toggle",
    "fieldname": "enabled",
@@ -193,13 +199,15 @@
    "label": "Gallery"
   },
   {
+   "allow_on_submit": 1,
    "depends_on": "eval:!doc.__islocal",
    "description": "Upload gallery images",
    "fieldname": "upload_images_btn",
    "fieldtype": "Button",
-   "label": "📷 Upload Images"
+   "label": "\ud83d\udcf7 Upload Images"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "gallery_status",
    "fieldtype": "HTML",
    "label": "Gallery Status"
@@ -209,11 +217,13 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "background_image",
    "fieldtype": "Attach Image",
    "label": "Background Image"
   },
   {
+   "allow_on_submit": 1,
    "description": "Added via Upload Images",
    "fieldname": "images",
    "fieldtype": "Table",
@@ -290,6 +300,7 @@
    "label": "Rules & Limitations"
   },
   {
+   "allow_on_submit": 1,
    "default": "0",
    "description": "Apply to all classes of the branch",
    "fieldname": "all_classes",
@@ -297,17 +308,40 @@
    "label": "All Classes"
   },
   {
+   "allow_on_submit": 1,
    "depends_on": "eval:doc.all_classes==0",
    "description": "Eligible classes / divisions",
    "fieldname": "classes",
    "fieldtype": "Table",
    "label": "Classes",
    "options": "Game Authority Class"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Game Authority",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "registration_fees_section",
+   "fieldtype": "Section Break",
+   "label": "Registration Fees"
+  },
+  {
+   "fieldname": "registration_fees_details",
+   "fieldtype": "Table",
+   "label": "Registration Fees Details",
+   "options": "Games Fee"
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2026-05-15 12:00:00.000000",
+ "modified": "2026-05-26 00:08:20.849315",
  "modified_by": "Administrator",
  "module": "Unity Games",
  "name": "Game Authority",
@@ -328,8 +362,13 @@
    "share": 1,
    "submit": 1,
    "write": 1
+  },
+  {
+   "read": 1,
+   "role": "All"
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

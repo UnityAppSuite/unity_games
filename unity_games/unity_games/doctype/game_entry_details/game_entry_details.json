@@ -1,53 +1,67 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-05-15 12:00:00.000000",
+ "creation": "2026-05-15 12:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "name_of_game",
   "age_group",
-  "events"
+  "events",
+  "fees"
  ],
  "fields": [
   {
-   "description": "Read-only after submit",
+   "description": "",
    "fieldname": "name_of_game",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Name of Game",
    "options": "Games",
-   "reqd": 1
+   "reqd": 1,
+   "columns": 3
   },
   {
-   "description": "Read-only after submit",
+   "description": "",
    "fieldname": "age_group",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Age Group",
    "options": "Age",
-   "reqd": 1
+   "reqd": 1,
+   "columns": 2
   },
   {
-   "description": "Read-only after submit",
+   "description": "",
    "fieldname": "events",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Events",
    "options": "Game Events",
-   "reqd": 1
+   "reqd": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "fees",
+   "fieldtype": "Float",
+   "label": "Fee (\u20b9)",
+   "in_list_view": 1,
+   "read_only": 1,
+   "columns": 2,
+   "precision": "2"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-05-15 12:00:00.000000",
+ "modified": "2026-05-21 11:01:44.832943",
  "modified_by": "Administrator",
  "module": "Unity Games",
  "name": "Game Entry Details",
  "owner": "Administrator",
  "permissions": [],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

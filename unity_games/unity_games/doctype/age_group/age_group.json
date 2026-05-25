@@ -1,12 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2026-05-15 12:00:00.000000",
+ "creation": "2026-05-15 12:00:00",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "age"
+  "age",
+  "fees"
  ],
  "fields": [
   {
@@ -16,17 +17,24 @@
    "label": "Age",
    "options": "Age",
    "reqd": 1
+  },
+  {
+   "fieldname": "fees",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Fees"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-05-15 12:00:00.000000",
+ "modified": "2026-05-19 17:47:07.377803",
  "modified_by": "Administrator",
  "module": "Unity Games",
  "name": "Age Group",
  "owner": "Administrator",
  "permissions": [],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

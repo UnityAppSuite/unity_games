@@ -1,8 +1,9 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "format:{game_organiser}-{name_of_game}",
- "creation": "2026-05-15 12:00:00.000000",
+ "creation": "2026-05-15 12:00:00",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -12,6 +13,7 @@
   "name_of_game",
   "column_break_flags",
   "enabled",
+  "last_day_to_register",
   "section_break_age_groups",
   "age_groups",
   "section_break_events",
@@ -73,11 +75,17 @@
    "label": "Events",
    "options": "Events",
    "reqd": 1
+  },
+  {
+   "description": "After this date this particular game won't be visible in form.",
+   "fieldname": "last_day_to_register",
+   "fieldtype": "Datetime",
+   "label": "Last Day to Register"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-05-15 12:00:00.000000",
+ "modified": "2026-05-21 10:40:34.921374",
  "modified_by": "Administrator",
  "module": "Unity Games",
  "name": "Games",
@@ -95,8 +103,13 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "read": 1,
+   "role": "All"
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

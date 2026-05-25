@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "autoname": "field:name_of_organiser",
  "creation": "2026-05-15 12:00:00.000000",

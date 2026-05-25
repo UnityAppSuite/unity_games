@@ -247,3 +247,33 @@ required_apps = ["erpnext", "education", "payments", "edu_quality"]
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+
+# ---- Unity Games hooks --------------------------------------------------
+
+permission_query_conditions = {
+	"Game Entry": "unity_games.utils.permissions.get_permission_query_conditions",
+}
+
+has_permission = {
+	"Game Entry": "unity_games.utils.permissions.has_permission",
+}
+
+doc_events = {
+	"Game Authority": {
+		"after_insert": "unity_games.utils.google_calendar.insert_event_in_google_calendar",
+		"on_update": "unity_games.utils.google_calendar.update_event_in_google_calendar",
+		"on_trash": "unity_games.utils.google_calendar.delete_event_from_google_calendar",
+	},
+	"File": {
+		"on_trash": "unity_games.utils.gallery_api.prune_gallery_row_on_file_trash",
+	},
+}
+
+scheduler_events = {
+	"cron": {
+		"0 6 * * *": [
+			"unity_games.utils.tasks.send_game_authority_reminders",
+		],
+	},
+}

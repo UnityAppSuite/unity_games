@@ -1,13 +1,11 @@
 {
  "actions": [],
- "allow_rename": 0,
- "creation": "2026-05-15 12:00:00.000000",
+ "allow_import": 1,
+ "creation": "2026-05-15 12:00:00",
  "default_view": "List",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "is_submittable": 1,
- "track_changes": 1,
  "field_order": [
   "student_section",
   "student",
@@ -23,25 +21,34 @@
   "student_class",
   "student_division",
   "branch",
+  "school",
   "selection_section",
   "game_authority",
   "name_of_game",
   "column_break_selection",
   "age_group",
   "events",
-  "cart_section",
   "game_entry_details",
   "payment_section",
-  "entry_fee",
-  "total_entry_fee",
+  "event_fee",
+  "registration_fees",
+  "late_fee",
+  "total",
   "column_break_payment",
+  "payment_parent",
+  "is_paid_via_parent",
   "payment_status",
   "payment_completed_at",
+  "transaction_id",
   "status_section",
   "selection_status",
   "external_portal_uid",
   "column_break_status",
-  "external_sync_status"
+  "external_sync_status",
+  "cart_json",
+  "consent_verified_at",
+  "consent_otp",
+  "amended_from"
  ],
  "fields": [
   {
@@ -101,7 +108,6 @@
    "label": "Program Enrollment"
   },
   {
-   "description": "Resolved server-side",
    "fieldname": "program_enrollment",
    "fieldtype": "Link",
    "label": "Program Enrollment",
@@ -122,26 +128,33 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "From Program Enrollment",
    "fieldname": "student_class",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Student Class",
+   "options": "Program",
    "read_only": 1,
    "reqd": 1
   },
   {
-   "description": "From Program Enrollment",
    "fieldname": "student_division",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "Student Division",
+   "options": "Student Group",
    "read_only": 1
   },
   {
-   "description": "From the student's branch",
    "fieldname": "branch",
    "fieldtype": "Link",
    "label": "Branch",
    "options": "Branch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "school",
+   "fieldtype": "Link",
+   "label": "School",
+   "no_copy": 1,
+   "options": "School",
    "read_only": 1
   },
   {
@@ -190,16 +203,22 @@
    "reqd": 1
   },
   {
-   "fieldname": "cart_section",
-   "fieldtype": "Section Break",
-   "label": "Selected Games"
-  },
-  {
-   "description": "Multi-game cart; drives fan-out",
+   "description": "Web-form cart only (hidden in desk; cleared on save)",
    "fieldname": "game_entry_details",
    "fieldtype": "Table",
-   "label": "Game Entry Details",
+   "hidden": 1,
+   "label": "Selected Games",
+   "no_copy": 1,
    "options": "Game Entry Details"
+  },
+  {
+   "description": "Internal: captured multi-game cart for fan-out",
+   "fieldname": "cart_json",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Cart JSON",
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "fieldname": "payment_section",
@@ -207,20 +226,54 @@
    "label": "Payment"
   },
   {
-   "description": "Per-game fee",
-   "fieldname": "entry_fee",
+   "fieldname": "event_fee",
    "fieldtype": "Currency",
-   "label": "Entry Fee"
+   "label": "Event Fee (this game)",
+   "no_copy": 1,
+   "read_only": 1
   },
   {
-   "description": "Payment amount field",
-   "fieldname": "total_entry_fee",
+   "description": "Game Authority base + Age + Event Fees",
+   "fieldname": "registration_fees",
    "fieldtype": "Currency",
-   "label": "Total Entry Fee"
+   "label": "Registration Fees",
+   "read_only": 1
+  },
+  {
+   "fieldname": "late_fee",
+   "fieldtype": "Currency",
+   "label": "Late Fee",
+   "read_only": 1
+  },
+  {
+   "description": "Amount payable (registration + late)",
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "label": "Total",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_payment",
    "fieldtype": "Column Break"
+  },
+  {
+   "description": "If set, the payment for this entry was made by the linked carrier (paid-via-parent).",
+   "fieldname": "payment_parent",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Payment Parent",
+   "no_copy": 1,
+   "options": "Game Entry",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_paid_via_parent",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Paid via Parent",
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "default": "Not Applicable",
@@ -236,6 +289,14 @@
    "fieldname": "payment_completed_at",
    "fieldtype": "Datetime",
    "label": "Payment Completed At",
+   "read_only": 1
+  },
+  {
+   "description": "Set by easebuzz webhook on successful payment.",
+   "fieldname": "transaction_id",
+   "fieldtype": "Data",
+   "label": "Transaction ID",
+   "no_copy": 1,
    "read_only": 1
   },
   {
@@ -271,11 +332,39 @@
    "label": "External Sync Status",
    "options": "Not Synced\nSynced\nFailed",
    "read_only": 1
+  },
+  {
+   "description": "Set when the parent OTP was verified on the web form",
+   "fieldname": "consent_verified_at",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Consent Verified At",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "description": "Transient: verified parent OTP from the web form",
+   "fieldname": "consent_otp",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Consent OTP",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Game Entry",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2026-05-15 12:00:00.000000",
+ "modified": "2026-05-26 00:23:29.673919",
  "modified_by": "Administrator",
  "module": "Unity Games",
  "name": "Game Entry",
@@ -297,6 +386,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
