@@ -28,12 +28,7 @@ def add_gallery_images(game_authority, file_urls):
 
 
 def prune_gallery_row_on_file_trash(doc, method=None):
-	"""When a File attached to a Game Authority is deleted, drop the matching Gallery Images row.
-
-	Uses a direct child-table delete (not parent.save()) so we don't fire Game Authority
-	on_update — that would re-trigger the Google Calendar sync mid-File-deletion and
-	any failure there would roll back the File deletion itself.
-	"""
+	"""Drop the matching Gallery Images row when its File is deleted."""
 	if doc.attached_to_doctype != "Game Authority" or not doc.attached_to_name or not doc.file_url:
 		return
 	frappe.db.delete(

@@ -331,3 +331,34 @@ def verify_consent_otp(student, game_authority, otp):
 	return frappe.cache().get_value(
 		_otp_cache_key(student, game_authority)
 	) == str(otp).strip()
+
+
+@frappe.whitelist(methods=["POST"])
+def simulate_payment_webhook(game_entry, status="success", transaction_id=None, txnid=None, amount=None):
+	"""Replay the Easebuzz webform callback against a Game Entry for testing."""
+	if not (frappe.conf.get("developer_mode") or "System Manager" in frappe.get_roles(frappe.session.user)):
+		frappe.throw(_("Restricted to developer-mode sites or System Manager users."))
+	if not game_entry:
+		frappe.throw(_("game_entry is required."))
+	if not frappe.db.exists("Game Entry", game_entry):
+		frappe.throw(_("Game Entry {0} not found.").format(game_entry))
+
+	ge = frappe.get_doc("Game Entry", game_entry)
+	result = ge.validate_payment({
+		"status": status,
+		"amount": amount or ge.total,
+		"txnid": transaction_id or txnid,
+	})
+	frappe.db.commit()
+
+	ge.reload()
+	return {
+		"status": "ok",
+		"result": result,
+		"game_entry": {
+			"name": ge.name,
+			"payment_status": ge.payment_status,
+			"docstatus": ge.docstatus,
+			"transaction_id": ge.transaction_id,
+		},
+	}

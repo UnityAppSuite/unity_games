@@ -37,6 +37,10 @@ class GameEntry(Document):
 		self.name = "-".join([slug(self.student), slug(self.name_of_game), slug(self.academic_year)])
 
 	def validate(self):
+		# Payment finalize bypasses re-validation — the user already paid; window/selection
+		# changes after that point must not block the doc from being marked Paid + submitted.
+		if self.flags.get("_payment_finalize"):
+			return
 		self.validate_authority_window()
 		for sel in self.flags.get("_cart") or [{
 			"name_of_game": self.name_of_game,
@@ -49,55 +53,49 @@ class GameEntry(Document):
 	def after_insert(self):
 		if self.flags.get("_is_fanned_child"):
 			return
-		carrier_name = self.payment_parent or self.name
-		already = self.existing_games()
-		for row in (self.flags.get("_cart") or [])[1:]:
-			if row["name_of_game"] in already:
-				continue
-			child = frappe.new_doc("Game Entry")
-			child.update({
-				"student": self.student,
-				"game_authority": self.game_authority,
-				"name_of_game": row["name_of_game"],
-				"age_group": row["age_group"],
-				"events": row["events"],
-				"selection_status": "Applied",
-				"payment_parent": carrier_name,
-				"is_paid_via_parent": 1,
-				"payment_status": "Paid" if self.flags.get("_is_free_rider") else "Pending",
-			})
-			child.flags._cart = [row]
-			child.flags._is_fanned_child = True
-			child.insert(ignore_permissions=True)
-			already.add(row["name_of_game"])
-		# Free-rider OR a no-cost registration (Not Applicable) skips the gateway and submits inline.
-		if self.flags.get("_is_free_rider") or not flt(self.total):
-			self.submit()
-			for cname in frappe.get_all(
-				"Game Entry",
-				filters={"payment_parent": carrier_name, "docstatus": 0, "name": ["!=", self.name]},
-				pluck="name",
-			):
-				frappe.get_doc("Game Entry", cname).submit()
-		self._release_submit_lock()
+		try:
+			carrier_name = self.payment_parent or self.name
+			already = self.existing_games()
+			for row in (self.flags.get("_cart") or [])[1:]:
+				if row["name_of_game"] in already:
+					continue
+				child = frappe.new_doc("Game Entry")
+				child.update({
+					"student": self.student,
+					"game_authority": self.game_authority,
+					"name_of_game": row["name_of_game"],
+					"age_group": row["age_group"],
+					"events": row["events"],
+					"selection_status": "Applied",
+					"payment_parent": carrier_name,
+					"is_paid_via_parent": 1,
+					"payment_status": "Not Applicable",
+				})
+				child.flags._cart = [row]
+				child.flags._is_fanned_child = True
+				child.insert(ignore_permissions=True)
+				already.add(row["name_of_game"])
+			if self.flags.get("_is_free_rider") or not flt(self.total):
+				self.flags.ignore_permissions = True
+				self.submit()
+				for cname in frappe.get_all(
+					"Game Entry",
+					filters={"payment_parent": carrier_name, "docstatus": 0, "name": ["!=", self.name]},
+					pluck="name",
+				):
+					ch = frappe.get_doc("Game Entry", cname)
+					ch.flags.ignore_permissions = True
+					ch.submit()
+		finally:
+			self._release_submit_lock()
 
 	def before_cancel(self):
-		if self.payment_status == "Paid" and not self.flags.get("_refund_confirmed"):
-			frappe.throw(_(
-				"This entry was Paid. Confirm refund processed before cancelling "
-				"(set flags._refund_confirmed=1)."
-			))
-		# Refund confirmed → bypass Frappe's back-link check (Payment Entry still references this doc).
-		self.flags.ignore_links = True
 		for cname in frappe.get_all(
 			"Game Entry",
 			filters={"payment_parent": self.name, "docstatus": 1},
 			pluck="name",
 		):
-			ch = frappe.get_doc("Game Entry", cname)
-			ch.flags._refund_confirmed = True
-			ch.flags.ignore_links = True
-			ch.cancel()
+			frappe.get_doc("Game Entry", cname).cancel()
 
 	# ============================================================
 	# Cart
@@ -316,7 +314,6 @@ class GameEntry(Document):
 		return f"ug:lock:{self.student}:{self.game_authority}"
 
 	def _acquire_submit_lock(self):
-		# Lock blocks parallel-guardian races; TTL enforced in code (Frappe cache TTL is unreliable here).
 		import time
 		key = self._lock_key()
 		held = frappe.cache().get_value(key)
@@ -360,12 +357,10 @@ class GameEntry(Document):
 			self.flags._incremental_only = True
 			self.flags._prior_carrier = prior.name
 			return
-		# Free-rider: nothing new to charge → attach to prior carrier and skip gateway.
 		self.flags._is_free_rider = True
 		self.payment_parent = prior.name
 		self.is_paid_via_parent = 1
-		self.payment_status = "Paid"
-		self.payment_completed_at = now_datetime()
+		self.payment_status = "Not Applicable"
 
 	# ============================================================
 	# Consent OTP
@@ -455,42 +450,60 @@ class GameEntry(Document):
 	# Payment
 	# ============================================================
 	def validate_payment(self, data=None):
-		"""Easebuzz webhook entrypoint — flips carrier+children Paid, then writes one Payment Entry."""
-		# Payments app pre-flight calls this with no payload; treat as a no-op so insert doesn't auto-pay.
+		"""Mark the carrier Paid, cascade siblings to Not Applicable, create one Payment Entry."""
 		if not data:
 			return {"status": "pending"}
 		if str(data.get("status", "")).lower() not in SUCCESS_STATUSES:
+			frappe.log_error(
+				title=f"Game Entry validate_payment rejected non-success: {self.name}",
+				message=f"status={data.get('status')!r}\nPayload: {data}",
+			)
 			return {"status": "failed", "message": _("Payment not successful: {0}").format(data.get("status"))}
-		now = now_datetime()
-		amount = data.get("amount") or self.total
-		txnid = data.get("txnid") or self.transaction_id
-		self.payment_status = "Paid"
-		self.payment_completed_at = now
-		if txnid:
-			self.transaction_id = txnid
-		self.save(ignore_permissions=True)
-		if self.docstatus == 0:
-			self.submit()
-		for cname in frappe.get_all("Game Entry", filters={"payment_parent": self.name}, pluck="name"):
-			ch = frappe.get_doc("Game Entry", cname)
-			ch.payment_status = "Paid"
-			ch.payment_completed_at = now
+		if self.payment_status == "Paid" and self.docstatus == 1:
+			return {"status": "success", "message": _("Already reconciled")}
+		try:
+			now = now_datetime()
+			amount = data.get("amount") or self.total
+			txnid = data.get("txnid") or self.transaction_id
+			self.payment_status = "Paid"
+			self.payment_completed_at = now
 			if txnid:
-				ch.transaction_id = txnid
-			ch.save(ignore_permissions=True)
-			if ch.docstatus == 0:
-				ch.submit()
-		self._create_payment_entry(amount=amount, txnid=txnid)
-		frappe.db.commit()
-		return {"status": "success", "message": _("Payment validated")}
+				self.transaction_id = txnid
+			self.flags._payment_finalize = True
+			self.save(ignore_permissions=True)
+			if self.docstatus == 0:
+				self.submit()
+			for cname in frappe.get_all("Game Entry", filters={"payment_parent": self.name}, pluck="name"):
+				ch = frappe.get_doc("Game Entry", cname)
+				ch.payment_status = "Not Applicable"
+				ch.flags._payment_finalize = True
+				ch.save(ignore_permissions=True)
+				if ch.docstatus == 0:
+					ch.submit()
+			self._create_payment_entry(amount=amount, txnid=txnid)
+			frappe.db.commit()
+			return {"status": "success", "message": _("Payment validated")}
+		except Exception:
+			frappe.db.rollback()
+			frappe.log_error(
+				title=f"Game Entry validate_payment failed: {self.name}",
+				message=frappe.get_traceback() + f"\n\nPayload: {data}",
+			)
+			raise
 
 	def on_payment_authorized(self, status=None, *args, **kwargs):
+		"""Frappe Payments hook — invoked by Payment Request after gateway success."""
 		if status and status.lower() not in SUCCESS_STATUSES:
 			return {"status": "failed", "message": _("Payment failed: {0}").format(status)}
-		return self.validate_payment(kwargs or {"amount": self.total})
+		data = {
+			"status": "success",
+			"amount": kwargs.get("amount") or self.total,
+			"txnid": kwargs.get("transaction_id"),
+		}
+		return self.validate_payment(data)
 
 	def _create_payment_entry(self, amount, txnid):
-		"""Best-effort Payment Entry; skips silently (with log) on missing accounting config."""
+		"""Create the Payment Entry; skips with a log if accounting config is missing."""
 		try:
 			from edu_quality.fees.controllers.fees import get_default_account
 			school = self.school

@@ -116,3 +116,5 @@ def send_game_authority_reminders():
 		return
 	_notify_coordinators(settings, authorities)
 	_notify_guardians(settings, authorities)
+
+
