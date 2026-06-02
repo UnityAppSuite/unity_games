@@ -516,9 +516,23 @@ class GameEntry(Document):
 				return
 			c = frappe.db.get_value("Company", company, [
 				"default_payment_gateway_account", "default_receivable_account",
+				"default_cash_account", "default_bank_account",
 				"default_currency", "cost_center",
 			], as_dict=True) or {}
-			paid_to = get_default_account("Online", company) or c.default_payment_gateway_account
+			paid_to = (
+				get_default_account("Online", company)
+				or c.default_payment_gateway_account
+				or frappe.db.get_value(
+					"Mode of Payment Account",
+					{"parent": "Online", "company": company},
+					"default_account",
+				)
+				or frappe.db.get_value(
+					"Mode of Payment Account", {"parent": "Online"}, "default_account"
+				)
+				or c.default_cash_account
+				or c.default_bank_account
+			)
 			if not (paid_from and paid_to):
 				frappe.log_error(
 					title="Unity Games Payment Entry skipped",
