@@ -28,7 +28,8 @@
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Amount"
+   "label": "Amount",
+   "non_negative": 1
   },
   {
    "default": "0",

@@ -155,7 +155,8 @@
   {
    "fieldname": "late_fee_amount",
    "fieldtype": "Currency",
-   "label": "Late Fee Amount"
+   "label": "Late Fee Amount",
+   "non_negative": 1
   },
   {
    "fieldname": "column_break_late_fee",

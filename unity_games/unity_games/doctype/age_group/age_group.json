@@ -22,7 +22,8 @@
    "fieldname": "fees",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Fees"
+   "label": "Fees",
+   "non_negative": 1
   }
  ],
  "index_web_pages_for_search": 1,

@@ -230,6 +230,7 @@
    "fieldtype": "Currency",
    "label": "Event Fee (this game)",
    "no_copy": 1,
+   "non_negative": 1,
    "read_only": 1
   },
   {
@@ -237,12 +238,14 @@
    "fieldname": "registration_fees",
    "fieldtype": "Currency",
    "label": "Registration Fees",
+   "non_negative": 1,
    "read_only": 1
   },
   {
    "fieldname": "late_fee",
    "fieldtype": "Currency",
    "label": "Late Fee",
+   "non_negative": 1,
    "read_only": 1
   },
   {
@@ -250,6 +253,7 @@
    "fieldname": "total",
    "fieldtype": "Currency",
    "label": "Total",
+   "non_negative": 1,
    "read_only": 1
   },
   {
